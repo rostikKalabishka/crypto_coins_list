@@ -15,7 +15,7 @@ class CryptoCurrenciesListApp extends StatelessWidget {
       theme: ThemeData(
           appBarTheme: AppBarTheme(
             backgroundColor: Colors.grey[900],
-            titleTextStyle: TextStyle(
+            titleTextStyle: const TextStyle(
                 color: Colors.white, fontSize: 20, fontWeight: FontWeight.w700),
           ),
           useMaterial3: true,
@@ -62,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
             width: 30,
             height: 30,
           ),
-          trailing: Icon(
+          trailing: const Icon(
             Icons.arrow_forward,
           ),
           title: Text(
