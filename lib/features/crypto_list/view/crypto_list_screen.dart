@@ -32,13 +32,13 @@ class _CryptoListScreenState extends State<CryptoListScreen> {
         title: Text(widget.title),
       ),
       body: (_cryptoCoinsList == null)
-          ? Center(
-              child: const CircularProgressIndicator(),
+          ? const Center(
+              child: CircularProgressIndicator(),
             )
           : ListView.separated(
-              padding: EdgeInsets.only(top: 16),
+              padding: const EdgeInsets.only(top: 16),
               itemCount: _cryptoCoinsList!.length,
-              separatorBuilder: (context, index) => Divider(),
+              separatorBuilder: (context, index) => const Divider(),
               itemBuilder: (context, i) {
                 final coin = _cryptoCoinsList![i];
 
