@@ -13,16 +13,21 @@ class CryptoListLoading extends CryptoListState {
 }
 
 class CryptoListLoaded extends CryptoListState {
-  final List<CryptoCoin> coinsList;
+  CryptoListLoaded({
+    required this.coinsList,
+  });
 
-  CryptoListLoaded({required this.coinsList});
+  final List<CryptoCoin> coinsList;
 
   @override
   List<Object?> get props => [coinsList];
 }
 
 class CryptoListLoadingFailure extends CryptoListState {
-  CryptoListLoadingFailure({this.exception});
+  CryptoListLoadingFailure({
+    this.exception,
+  });
+
   final Object? exception;
 
   @override

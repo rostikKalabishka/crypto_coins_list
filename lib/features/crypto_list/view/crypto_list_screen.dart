@@ -1,45 +1,43 @@
 import 'dart:async';
 
 import 'package:crypto_coins_list/features/crypto_list/bloc/crypto_list_bloc.dart';
+import 'package:crypto_coins_list/features/crypto_list/widgets/widgets.dart';
+import 'package:crypto_coins_list/repositories/crypto_coins/crypto_coins.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../../repositories/crypto_coins/crypto_coins.dart';
-import '../widgets/widgets.dart';
-
 class CryptoListScreen extends StatefulWidget {
-  const CryptoListScreen(
-    this.title, {
+  const CryptoListScreen({
     super.key,
   });
-
-  final String title;
 
   @override
   State<CryptoListScreen> createState() => _CryptoListScreenState();
 }
 
 class _CryptoListScreenState extends State<CryptoListScreen> {
-  final _cryptoListBloc = CryptoListBloc(GetIt.I<AbstractCoinsRepository>());
+  final _cryptoListBloc = CryptoListBloc(
+    GetIt.I<AbstractCoinsRepository>(),
+  );
 
   @override
   void initState() {
-    _cryptoListBloc.add(LoadCryptoListEvent());
+    _cryptoListBloc.add(LoadCryptoList());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: Text(widget.title),
+        title: const Text('CryptoCurrenciesList'),
       ),
       body: RefreshIndicator(
         onRefresh: () async {
           final completer = Completer();
-          _cryptoListBloc.add(LoadCryptoListEvent(completer: completer));
+          _cryptoListBloc.add(LoadCryptoList(completer: completer));
           return completer.future;
         },
         child: BlocBuilder<CryptoListBloc, CryptoListState>(
@@ -52,39 +50,34 @@ class _CryptoListScreenState extends State<CryptoListScreen> {
                 separatorBuilder: (context, index) => const Divider(),
                 itemBuilder: (context, i) {
                   final coin = state.coinsList[i];
-
-                  return CryptoCoinTile(
-                    coin: coin,
-                  );
+                  return CryotoCoinTile(coin: coin);
                 },
               );
             }
             if (state is CryptoListLoadingFailure) {
               return Center(
-                  child: Column(
-                children: [
-                  Text(
-                    'Something went Wrong',
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-                  Text(
-                    'Please try again later',
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelSmall
-                        ?.copyWith(fontSize: 16),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      _cryptoListBloc.add(LoadCryptoListEvent());
-                    },
-                    child: const Text('Try again'),
-                  ),
-                ],
-              ));
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Something went wrong',
+                      style: theme.textTheme.headlineMedium,
+                    ),
+                    Text(
+                      'Please try againg later',
+                      style: theme.textTheme.labelSmall?.copyWith(fontSize: 16),
+                    ),
+                    const SizedBox(height: 30),
+                    TextButton(
+                      onPressed: () {
+                        _cryptoListBloc.add(LoadCryptoList());
+                      },
+                      child: const Text('Try againg'),
+                    ),
+                  ],
+                ),
+              );
             }
             return const Center(child: CircularProgressIndicator());
           },

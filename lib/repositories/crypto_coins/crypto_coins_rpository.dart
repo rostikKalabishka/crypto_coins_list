@@ -2,11 +2,13 @@ import 'package:dio/dio.dart';
 
 import 'package:crypto_coins_list/repositories/crypto_coins/crypto_coins.dart';
 
-import 'models/crypto_coins_detail.dart';
-
 class CryptoCoinsRepository implements AbstractCoinsRepository {
-  CryptoCoinsRepository({required this.dio});
+  CryptoCoinsRepository({
+    required this.dio,
+  });
+
   final Dio dio;
+
   @override
   Future<List<CryptoCoin>> getCoinsList() async {
     final response = await dio.get(
@@ -18,11 +20,12 @@ class CryptoCoinsRepository implements AbstractCoinsRepository {
       final usdData =
           (e.value as Map<String, dynamic>)['USD'] as Map<String, dynamic>;
       final price = usdData['PRICE'];
-      final imageURL = usdData['IMAGEURL'];
+      final imageUrl = usdData['IMAGEURL'];
+
       return CryptoCoin(
         name: e.key,
         priceInUSD: price,
-        imageUrl: 'https://www.cryptocompare.com/$imageURL',
+        imageUrl: 'https://www.cryptocompare.com/$imageUrl',
       );
     }).toList();
     return cryptoCoinsList;
@@ -37,8 +40,8 @@ class CryptoCoinsRepository implements AbstractCoinsRepository {
     final dataRaw = data['RAW'] as Map<String, dynamic>;
     final coinData = dataRaw[currencyCode] as Map<String, dynamic>;
     final usdData = coinData['USD'] as Map<String, dynamic>;
-    final price = coinData['PRICE'];
-    final imageUrl = coinData['IMAGEURL'];
+    final price = usdData['PRICE'];
+    final imageUrl = usdData['IMAGEURL'];
     final toSymbol = usdData['TOSYMBOL'];
     final lastUpdate = usdData['LASTUPDATE'];
     final hight24Hour = usdData['HIGH24HOUR'];
