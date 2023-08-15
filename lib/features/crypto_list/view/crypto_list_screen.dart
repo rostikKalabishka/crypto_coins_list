@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:crypto_coins_list/features/crypto_list/bloc/crypto_list_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,11 +32,17 @@ class _CryptoListScreenState extends State<CryptoListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(widget.title),
-        ),
-        body: BlocBuilder<CryptoListBloc, CryptoListState>(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(widget.title),
+      ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          final completer = Completer();
+          _cryptoListBloc.add(LoadCryptoListEvent(completer: completer));
+          return completer.future;
+        },
+        child: BlocBuilder<CryptoListBloc, CryptoListState>(
           bloc: _cryptoListBloc,
           builder: (context, state) {
             if (state is CryptoListLoaded) {
@@ -66,28 +74,22 @@ class _CryptoListScreenState extends State<CryptoListScreen> {
                         .labelSmall
                         ?.copyWith(fontSize: 16),
                   ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      _cryptoListBloc.add(LoadCryptoListEvent());
+                    },
+                    child: const Text('Try again'),
+                  ),
                 ],
               ));
             }
             return const Center(child: CircularProgressIndicator());
           },
-        )
-        // (_cryptoCoinsList == null)
-        //     ? const Center(
-        //         child: CircularProgressIndicator(),
-        //       )
-        //     : ListView.separated(
-        //         padding: const EdgeInsets.only(top: 16),
-        //         itemCount: _cryptoCoinsList!.length,
-        //         separatorBuilder: (context, index) => const Divider(),
-        //         itemBuilder: (context, i) {
-        //           final coin = _cryptoCoinsList![i];
-
-        //           return CryptoCoinTile(
-        //             coin: coin,
-        //           );
-        //         },
-        //       ),
-        );
+        ),
+      ),
+    );
   }
 }
