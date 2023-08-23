@@ -2,8 +2,8 @@ import 'package:crypto_coins_list/repositories/crypto_coins/models/crypto_coin.d
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class CryotoCoinTile extends StatelessWidget {
-  const CryotoCoinTile({
+class CryptoCoinTile extends StatelessWidget {
+  const CryptoCoinTile({
     Key? key,
     required this.coin,
   }) : super(key: key);
