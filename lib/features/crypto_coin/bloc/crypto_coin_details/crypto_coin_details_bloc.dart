@@ -37,7 +37,6 @@ class CryptoCoinDetailsBloc
 
   @override
   void onError(Object error, StackTrace stackTrace) {
-    // TODO: implement onError
     super.onError(error, stackTrace);
     GetIt.I<Talker>().handle(error, stackTrace);
   }
