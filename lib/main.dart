@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:talker_dio_logger/talker_dio_logger.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 import 'crypto_coins_list_app.dart';
@@ -13,8 +14,13 @@ void main() {
   GetIt.I.registerSingleton(talker);
   GetIt.I<Talker>().debug('Talker started...');
 
+  final dio = Dio();
+  dio.interceptors.add(TalkerDioLogger(
+      talker: talker,
+      settings: const TalkerDioLoggerSettings(printResponseData: false)));
+
   GetIt.I.registerLazySingleton<AbstractCoinsRepository>(
-      () => CryptoCoinsRepository(dio: Dio()));
+      () => CryptoCoinsRepository(dio: dio));
 
   FlutterError.onError =
       (details) => GetIt.I<Talker>().handle(details.exception, details.stack);
