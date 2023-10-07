@@ -46,7 +46,7 @@ class CryptoCoinsRepository implements AbstractCoinsRepository {
     final lastUpdate = usdData['LASTUPDATE'];
     final hight24Hour = usdData['HIGH24HOUR'];
     final low24Hours = usdData['LOW24HOUR'];
-
+    print(currencyCode);
     return CryptoCoinDetail(
       name: currencyCode,
       priceInUSD: price,
